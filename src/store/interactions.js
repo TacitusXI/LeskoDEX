@@ -24,6 +24,7 @@ import {
 import Token from "../abis/ESKO.json";
 import Exchange from "../abis/LESKOdex.json";
 import { ETHER_ADDRESS } from "../helpers";
+import { CONTRACT_ADDRESSES } from "../config";
 
 export const loadWeb3 = async (dispatch) => {
   if (typeof window.ethereum !== "undefined") {
@@ -45,32 +46,60 @@ export const loadAccount = async (web3, dispatch) => {
 
 export const loadToken = async (web3, networkId, dispatch) => {
   try {
+    let tokenAddress;
+    
+    // Check if we have a predefined address for this network
+    if (CONTRACT_ADDRESSES[networkId]) {
+      tokenAddress = CONTRACT_ADDRESSES[networkId].Token;
+    } else if (Token.networks && Token.networks[networkId]) {
+      // Fall back to ABI network address for local development
+      tokenAddress = Token.networks[networkId].address;
+    } else {
+      throw new Error("Token contract not deployed to detected network.");
+    }
+    
     const token = new web3.eth.Contract(
       Token.abi,
-      Token.networks[networkId].address
+      tokenAddress
     );
     dispatch(tokenLoaded(token));
     return token;
   } catch (error) {
     console.log(
-      "Contract not deployed to the current network. Please select another network with Metamask."
+      "Contract not deployed to the current network. Please select another network with Metamask.",
+      error
     );
+    window.alert("Token contract not deployed to detected network. Please connect to a supported network.");
     return null;
   }
 };
 
 export const loadExchange = async (web3, networkId, dispatch) => {
   try {
+    let exchangeAddress;
+    
+    // Check if we have a predefined address for this network
+    if (CONTRACT_ADDRESSES[networkId]) {
+      exchangeAddress = CONTRACT_ADDRESSES[networkId].Exchange;
+    } else if (Exchange.networks && Exchange.networks[networkId]) {
+      // Fall back to ABI network address for local development
+      exchangeAddress = Exchange.networks[networkId].address;
+    } else {
+      throw new Error("Exchange contract not deployed to detected network.");
+    }
+    
     const exchange = new web3.eth.Contract(
       Exchange.abi,
-      Exchange.networks[networkId].address
+      exchangeAddress
     );
     dispatch(exchangeLoaded(exchange));
     return exchange;
   } catch (error) {
     console.log(
-      "Contract not deployed to the current network. Please select another network with Metamask."
+      "Contract not deployed to the current network. Please select another network with Metamask.",
+      error
     );
+    window.alert("Exchange contract not deployed to detected network. Please connect to a supported network.");
     return null;
   }
 };
