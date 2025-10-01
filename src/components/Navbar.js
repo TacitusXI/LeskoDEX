@@ -10,44 +10,33 @@ class Navbar extends Component{
   render(){
     return(
       <>
-        {/* Demo Mode Banner */}
-        {DEMO_MODE && (
-          <div style={{
-            background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
-            color: 'white',
-            padding: '12px 20px',
-            textAlign: 'center',
-            fontSize: '14px',
-            fontWeight: '500',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-            zIndex: 1000,
-            position: 'relative'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '20px' }} role="img" aria-label="Demo Mode">🎭</span>
-              <span>
-                <strong>DEMO MODE</strong> - This is a static demonstration of LeskoDEX interface. 
-                All data is simulated for portfolio purposes.
-              </span>
-              <span style={{ 
-                background: 'rgba(255,255,255,0.2)', 
-                padding: '4px 12px', 
-                borderRadius: '12px',
-                fontSize: '12px',
-                fontWeight: '600'
-              }}>
-                No Blockchain Connection
-              </span>
-            </div>
-          </div>
-        )}
-        
-        <nav className="navbar navbar-expand-lg navbar-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark" style={{ position: 'relative' }}>
             <a className="navbar-brand" href="#/"><img src={logo} width="127" height="32" alt=""></img>
             </a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
+            {/* Demo Mode Badge - Compact */}
+            {DEMO_MODE && (
+              <div style={{
+                background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                padding: '4px 16px',
+                borderRadius: '20px',
+                fontSize: '12px',
+                fontWeight: '600',
+                marginRight: '15px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 2px 6px rgba(102, 126, 234, 0.4)',
+                whiteSpace: 'nowrap'
+              }}>
+                <span role="img" aria-label="Demo Mode" style={{ fontSize: '14px' }}>🎭</span>
+                <span>DEMO MODE</span>
+              </div>
+            )}
+            
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <a
