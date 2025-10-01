@@ -24,9 +24,32 @@ import {
 import Token from "../abis/ESKO.json";
 import Exchange from "../abis/LESKOdex.json";
 import { ETHER_ADDRESS } from "../helpers";
-import { CONTRACT_ADDRESSES } from "../config";
+import { CONTRACT_ADDRESSES, DEMO_MODE } from "../config";
+import {
+  MOCK_ACCOUNT,
+  MOCK_BALANCES,
+  MOCK_CANCELLED_ORDERS,
+  MOCK_FILLED_ORDERS,
+  MOCK_ALL_ORDERS
+} from "./mockData";
 
 export const loadWeb3 = async (dispatch) => {
+  if (DEMO_MODE) {
+    // Mock Web3 for demo mode with utils
+    const Web3Real = require('web3');
+    const mockWeb3 = {
+      eth: {
+        net: { getId: () => Promise.resolve(999) },
+        getAccounts: () => Promise.resolve([MOCK_ACCOUNT]),
+        Contract: class MockContract {},
+        getBalance: () => Promise.resolve("5234000000000000000")
+      },
+      utils: Web3Real.utils // Use real Web3 utils for conversion
+    };
+    dispatch(web3Loaded(mockWeb3));
+    return mockWeb3;
+  }
+  
   if (typeof window.ethereum !== "undefined") {
     const web3 = new Web3(window.ethereum);
     dispatch(web3Loaded(web3));
@@ -38,6 +61,11 @@ export const loadWeb3 = async (dispatch) => {
 };
 
 export const loadAccount = async (web3, dispatch) => {
+  if (DEMO_MODE) {
+    dispatch(web3AccountLoaded(MOCK_ACCOUNT));
+    return MOCK_ACCOUNT;
+  }
+  
   const accounts = await web3.eth.getAccounts();
   const account = accounts[0];
   dispatch(web3AccountLoaded(account));
@@ -45,6 +73,20 @@ export const loadAccount = async (web3, dispatch) => {
 };
 
 export const loadToken = async (web3, networkId, dispatch) => {
+  if (DEMO_MODE) {
+    // Mock token contract
+    const mockToken = {
+      options: { address: CONTRACT_ADDRESSES[999].Token },
+      methods: {
+        balanceOf: () => ({ call: () => Promise.resolve(MOCK_BALANCES.tokenBalance) }),
+        symbol: () => ({ call: () => Promise.resolve("ESKO") }),
+        name: () => ({ call: () => Promise.resolve("ESKO Token") })
+      }
+    };
+    dispatch(tokenLoaded(mockToken));
+    return mockToken;
+  }
+  
   try {
     let tokenAddress;
     
@@ -75,6 +117,19 @@ export const loadToken = async (web3, networkId, dispatch) => {
 };
 
 export const loadExchange = async (web3, networkId, dispatch) => {
+  if (DEMO_MODE) {
+    // Mock exchange contract
+    const mockExchange = {
+      options: { address: CONTRACT_ADDRESSES[999].Exchange },
+      methods: {
+        feePercent: () => ({ call: () => Promise.resolve("10") })
+      },
+      getPastEvents: () => Promise.resolve([])
+    };
+    dispatch(exchangeLoaded(mockExchange));
+    return mockExchange;
+  }
+  
   try {
     let exchangeAddress;
     
@@ -105,6 +160,14 @@ export const loadExchange = async (web3, networkId, dispatch) => {
 };
 
 export const loadAllOrders = async (exchange, dispatch) => {
+  if (DEMO_MODE) {
+    // Load mock data for demo
+    dispatch(cancelledOrdersLoaded(MOCK_CANCELLED_ORDERS));
+    dispatch(filledOrdersLoaded(MOCK_FILLED_ORDERS));
+    dispatch(allOrdersLoaded(MOCK_ALL_ORDERS));
+    return;
+  }
+  
   // Fetch cancelled orders with the "Cancel" event stream
   const cancelStream = await exchange.getPastEvents("OrderCancelled", {
     fromBlock: 0,
@@ -191,6 +254,16 @@ export const loadBalances = async (
   token,
   account
 ) => {
+  if (DEMO_MODE) {
+    // Load mock balances for demo
+    dispatch(etherBalanceLoaded(web3.utils ? web3.utils.toWei(MOCK_BALANCES.etherBalance, "ether") : "5234000000000000000"));
+    dispatch(tokenBalanceLoaded(web3.utils ? web3.utils.toWei(MOCK_BALANCES.tokenBalance, "ether") : "1250500000000000000000"));
+    dispatch(exchangeEtherBalanceLoaded(web3.utils ? web3.utils.toWei(MOCK_BALANCES.exchangeEtherBalance, "ether") : "2150000000000000000"));
+    dispatch(exchangeTokenBalanceLoaded(web3.utils ? web3.utils.toWei(MOCK_BALANCES.exchangeTokenBalance, "ether") : "875250000000000000000"));
+    dispatch(balancesLoaded());
+    return;
+  }
+  
   if (typeof account !== "undefined") {
     // Ether balance in wallet
     const etherBalance = await web3.eth.getBalance(account);
