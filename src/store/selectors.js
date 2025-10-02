@@ -132,11 +132,22 @@ const openOrders = state => {
   const filled = filledOrders(state)
   const cancelled = cancelledOrders(state)
 
+  console.log('🔍 openOrders selector:');
+  console.log('  - All orders:', all.length, 'IDs:', all.map(o => o.id));
+  console.log('  - Filled orders:', filled.length, 'IDs:', filled.slice(0, 10).map(o => o.id), '...');
+  console.log('  - Cancelled orders:', cancelled.length, 'IDs:', cancelled.map(o => o.id));
+
   const openOrders = reject(all, (order) => {
     const orderFilled = filled.some((o) => o.id === order.id)
     const orderCancelled = cancelled.some((o) => o.id === order.id)
+    if (orderFilled || orderCancelled) {
+      console.log('  ⚠️  Filtering out order ID:', order.id, 'filled:', orderFilled, 'cancelled:', orderCancelled);
+    }
     return(orderFilled || orderCancelled)
   })
+
+  console.log('  - Open orders after filter:', openOrders.length);
+  console.log('  - Open order IDs:', openOrders.map(o => o.id));
 
   return openOrders
 }

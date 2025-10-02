@@ -162,9 +162,14 @@ export const loadExchange = async (web3, networkId, dispatch) => {
 export const loadAllOrders = async (exchange, dispatch) => {
   if (DEMO_MODE) {
     // Load mock data for demo
+    console.log('📊 DEMO MODE: Loading mock data...');
+    console.log('  - Cancelled Orders:', MOCK_CANCELLED_ORDERS.length);
+    console.log('  - Filled Orders:', MOCK_FILLED_ORDERS.length);
+    console.log('  - All Orders:', MOCK_ALL_ORDERS.length);
     dispatch(cancelledOrdersLoaded(MOCK_CANCELLED_ORDERS));
     dispatch(filledOrdersLoaded(MOCK_FILLED_ORDERS));
     dispatch(allOrdersLoaded(MOCK_ALL_ORDERS));
+    console.log('✅ DEMO MODE: Mock data dispatched to Redux');
     return;
   }
   
