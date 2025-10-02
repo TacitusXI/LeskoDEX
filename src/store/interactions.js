@@ -200,6 +200,11 @@ export const loadAllOrders = async (exchange, dispatch) => {
 };
 
 export const subscribeToEvents = async (exchange, dispatch) => {
+  if (DEMO_MODE) {
+    // No event subscription needed in demo mode
+    return;
+  }
+  
   exchange.events.OrderCancelled({}, (error, event) => {
     dispatch(orderCancelled(event.returnValues));
   });
