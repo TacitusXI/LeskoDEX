@@ -1,8 +1,20 @@
 export const chartOptions = {
   chart: {
-    animations: { enabled: false },
+    animations: { enabled: true },
     toolbar: { show: false },
-    width: '100px'
+    width: '100px',
+    type: 'candlestick'
+  },
+  plotOptions: {
+    candlestick: {
+      colors: {
+        upward: '#00B746',
+        downward: '#EF403C'
+      },
+      wick: {
+        useFillColor: true
+      }
+    }
   },
   tooltip: {
     enabled: true,
