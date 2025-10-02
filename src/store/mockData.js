@@ -101,7 +101,7 @@ const generateTrades = () => {
 
 export const MOCK_FILLED_ORDERS = generateTrades();
 
-// Mock open orders (orderbook)
+// Mock open orders (orderbook) - using dynamic timestamps
 export const MOCK_ALL_ORDERS = [
   // Buy orders (buying ETH with ESKO)
   {
@@ -111,7 +111,7 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "1500000000000000000", // 1.5 ETH
     tokenGive: "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa", // ESKO
     amountGive: "142500000000000000000", // 142.5 ESKO (rate: 95 ESKO/ETH)
-    timestamp: "1705363200"
+    timestamp: String(now - 2 * HOUR)
   },
   {
     id: "102",
@@ -120,7 +120,7 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "2000000000000000000", // 2 ETH
     tokenGive: "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",
     amountGive: "188000000000000000000", // 188 ESKO (rate: 94 ESKO/ETH)
-    timestamp: "1705363300"
+    timestamp: String(now - 1 * HOUR - 50 * MINUTE)
   },
   {
     id: "103",
@@ -129,7 +129,7 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "1000000000000000000", // 1 ETH
     tokenGive: "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",
     amountGive: "93000000000000000000", // 93 ESKO (rate: 93 ESKO/ETH)
-    timestamp: "1705363400"
+    timestamp: String(now - 1 * HOUR - 30 * MINUTE)
   },
   {
     id: "104",
@@ -138,7 +138,7 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "3000000000000000000", // 3 ETH
     tokenGive: "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",
     amountGive: "276000000000000000000", // 276 ESKO (rate: 92 ESKO/ETH)
-    timestamp: "1705363500"
+    timestamp: String(now - 1 * HOUR)
   },
   // Sell orders (selling ETH for ESKO)
   {
@@ -148,7 +148,7 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "155000000000000000000", // 155 ESKO (rate: 103.33 ESKO/ETH)
     tokenGive: "0x0000000000000000000000000000000000000000", // ETH
     amountGive: "1500000000000000000", // 1.5 ETH
-    timestamp: "1705363600"
+    timestamp: String(now - 50 * MINUTE)
   },
   {
     id: "106",
@@ -157,7 +157,7 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "208000000000000000000", // 208 ESKO (rate: 104 ESKO/ETH)
     tokenGive: "0x0000000000000000000000000000000000000000",
     amountGive: "2000000000000000000", // 2 ETH
-    timestamp: "1705363700"
+    timestamp: String(now - 40 * MINUTE)
   },
   {
     id: "107",
@@ -166,7 +166,7 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "105000000000000000000", // 105 ESKO (rate: 105 ESKO/ETH)
     tokenGive: "0x0000000000000000000000000000000000000000",
     amountGive: "1000000000000000000", // 1 ETH
-    timestamp: "1705363800"
+    timestamp: String(now - 30 * MINUTE)
   },
   {
     id: "108",
@@ -175,6 +175,6 @@ export const MOCK_ALL_ORDERS = [
     amountGet: "318000000000000000000", // 318 ESKO (rate: 106 ESKO/ETH)
     tokenGive: "0x0000000000000000000000000000000000000000",
     amountGive: "3000000000000000000", // 3 ETH
-    timestamp: "1705363900"
+    timestamp: String(now - 20 * MINUTE)
   }
 ];
