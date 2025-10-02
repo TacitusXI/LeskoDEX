@@ -4,7 +4,7 @@
   "description": "Decentralized Ethereum Token Exchange",
   "author": "ileskov584@gmail.com",
   "private": true,
-  "homepage": "http://.",
+  "homepage": ".",
   "engines": {
     "node": "8.11.1"
   },
